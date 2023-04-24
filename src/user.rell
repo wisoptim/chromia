@@ -1,0 +1,13 @@
+module;
+import src.balance.*;
+
+entity user { 
+  key username: text;
+}
+
+operation create_user (username: text) {
+  require(username != "");
+  var new_user = create user (username);
+  create balance (new_user, 1000000); 
+}
+

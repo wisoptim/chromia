@@ -1,0 +1,41 @@
+module;
+import src.user.*;
+import src.balance.*;
+
+namespace token{
+
+entity token { 
+  key name;
+  key text: text;
+  mutable favorite: boolean;
+  key mutable owner: user;
+}
+
+operation mint_token (name, text:text, username:name) {
+  val owner = user@{.username == username};
+  create token (name, text, owner, false);
+}
+
+query get_tokens_by_user(username:text):list<(token)> {
+  return token@*{.owner == user@{username}} ;
+}
+
+function transfer_token(token_name:text, from_username:text, to_username:text, price:integer) {
+  //!!! SECURITY CAUTION. Make sure the caller must be the owner of the token!!!
+  val from_user = user@{.username == from_username};
+  val token = token@{.name == token_name, .owner == from_user} ;
+  require(token.owner == from_user);
+  
+  val new_owner = user@{.username == to_username};
+  update token(.owner = new_owner);
+  transfer_balance(new_owner, from_user, price);
+}
+
+operation switch_favorite (token_name:name, username:name) {
+ val owner = user@{.username == username};
+ val token = token@{.name == token_name};
+ val favorite_value = token.favorite;
+ update token(.favorite = not favorite_value);
+}
+
+}

@@ -1,0 +1,17 @@
+module;
+import src.user.*;
+
+entity balance {
+  key user;
+  mutable amount: integer;
+}
+
+function deduct_balance(user, amount:integer) {
+  update balance@{user} (amount -= amount);
+}
+
+function transfer_balance(from:user, to:user, amount:integer){
+  require( balance@{from}.amount >= amount);
+  update balance@{from} (amount -= amount);
+  update balance@{to} (amount += amount);
+}
