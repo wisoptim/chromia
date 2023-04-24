@@ -1,5 +1,8 @@
 module;
-import src.user.*;
+import user.*;
+import balance.*;
+import token.*;
+import token_collection.*;
 
 object my_name {
   mutable name= "World";

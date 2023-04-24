@@ -1,6 +1,6 @@
 module;
-import src.user.*;
-import src.balance.*;
+import user.*;
+import balance.*;
 
 namespace token{
 

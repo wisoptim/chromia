@@ -1,9 +1,16 @@
 blockchains:
-  hello:
+  nft:
     module: main
-compile:
-  rellVersion: 0.11.0
+
 test:
   modules:
     - test.arithmetic_test
     - test.data_test
+database: #The database attributes are all defaulted as followed
+  password: postchain
+  username: postchain
+  database: postchain
+  host: localhost
+  logSqlErrors: true
+  schema: rell_app
+  driver: org.postgresql.Driver

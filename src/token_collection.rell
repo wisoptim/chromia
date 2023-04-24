@@ -1,6 +1,6 @@
 module;
-import src.user.*;
-import src.token.{token.*};
+import user.*;
+import token.{token.*};
 
 entity token_collection { 
   key name;

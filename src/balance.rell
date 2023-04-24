@@ -1,5 +1,5 @@
 module;
-import src.user.*;
+import user.*;
 
 entity balance {
   key user;
@@ -14,4 +14,8 @@ function transfer_balance(from:user, to:user, amount:integer){
   require( balance@{from}.amount >= amount);
   update balance@{from} (amount -= amount);
   update balance@{to} (amount += amount);
+}
+
+query get_balance(username:name) {
+  return balance@{ user@{ username } }.amount;
 }

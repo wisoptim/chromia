@@ -1,13 +1,17 @@
 module;
-import src.balance.*;
+import balance.*;
 
 entity user { 
   key username: text;
 }
 
-operation create_user (username: text) {
+operation create_user(username: text) {
   require(username != "");
   var new_user = create user (username);
   create balance (new_user, 1000000); 
+}
+
+query get_user_by_username(username: text){
+  return user @? {username};
 }
 

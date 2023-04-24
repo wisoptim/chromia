@@ -1,0 +1,8 @@
+@test module;
+import ^^.main.{user, create_user};
+
+function test_add_name() {
+    val tx = rell.test.tx(create_user("Bob"));
+    tx.run();
+    assert_equals(user.username, "Bob");
+}
