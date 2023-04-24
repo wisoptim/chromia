@@ -2,7 +2,7 @@ module;
 import user.*;
 import balance.*;
 
-namespace token{
+
 
 entity token { 
   key name;
@@ -16,9 +16,13 @@ operation mint_token (name, text:text, username:name) {
   create token (name, text, owner, false);
 }
 
-query get_tokens_by_user(username:text):list<(token)> {
-  return token@*{.owner == user@{username}} ;
+operation switch_favorite_token (token_name:name, username:name) {
+ val owner = user@{.username == username};
+ val token = token@{.name == token_name};
+ val favorite_value = token.favorite;
+ update token(.favorite = not favorite_value);
 }
+
 
 function transfer_token(token_name:text, from_username:text, to_username:text, price:integer) {
   //!!! SECURITY CAUTION. Make sure the caller must be the owner of the token!!!
@@ -31,11 +35,6 @@ function transfer_token(token_name:text, from_username:text, to_username:text, p
   transfer_balance(new_owner, from_user, price);
 }
 
-operation switch_favorite (token_name:name, username:name) {
- val owner = user@{.username == username};
- val token = token@{.name == token_name};
- val favorite_value = token.favorite;
- update token(.favorite = not favorite_value);
-}
-
+query get_tokens_by_user(username:text):list<(token)> {
+  return token@*{.owner == user@{username}} ;
 }

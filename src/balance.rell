@@ -1,6 +1,8 @@
 module;
 import user.*;
 
+val INITIAL_BALANCE = 1000000;
+
 entity balance {
   key user;
   mutable amount: integer;

@@ -8,7 +8,7 @@ entity user {
 operation create_user(username: text) {
   require(username != "");
   var new_user = create user (username);
-  create balance (new_user, 1000000); 
+  create balance (new_user, INITIAL_BALANCE); 
 }
 
 query get_user_by_username(username: text){

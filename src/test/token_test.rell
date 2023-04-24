@@ -1,0 +1,14 @@
+@test module;
+import ^^.user.{user, create_user};
+import ^^.token.{token, mint_token, switch_favorite_token, transfer_token};
+
+function test_mint_token() {
+    val tx_user = rell.test.tx(create_user("Bob"));
+    tx_user.run();
+    val tx = rell.test.tx(mint_token("Token1", "Best Token", "Bob"));
+    tx.run();
+    assert_equals(token@{.name == "Token1"}, "Token1");
+}
+
+function switch_favorite_token() {}
+function transfer_token() {}

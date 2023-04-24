@@ -1,8 +1,10 @@
 @test module;
-import ^^.main.{user, create_user};
+import ^^.user.{user, create_user};
+import ^^.balance.{balance, INITIAL_BALANCE};
 
-function test_add_name() {
+function test_create_user() {
     val tx = rell.test.tx(create_user("Bob"));
     tx.run();
-    assert_equals(user.username, "Bob");
+    assert_equals(user@*{}(.username), ['Bob']);
+    assert_equals(balance@{user@*{.username =='Bob'}}, INITIAL_BALANCE);
 }
