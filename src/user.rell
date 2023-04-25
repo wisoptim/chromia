@@ -1,12 +1,15 @@
 module;
 import balance.*;
+import auth.*;
 
-entity user { 
+entity user {
+  key pubkey; 
   key username: text;
 }
 
-operation create_user(username: text) {
-  require(username != "");
+operation create_user(token: session_token, username: text) {
+  val pubkey = validate_session(token);
+  require(pubkey, username != "");
   var new_user = create user (username);
   create balance (new_user, INITIAL_BALANCE); 
 }

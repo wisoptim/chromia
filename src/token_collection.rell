@@ -9,22 +9,28 @@ entity token_collection {
   mutable favorite: boolean;
 }
 
-operation create_collection (collection_name:name, username:name) {
- val owner = user@{.username == username};
+operation create_collection (token: session_token, collection_name:name) {
+ val pubkey = validate_session(token);
+ require(pubkey);
+ val owner = user@{pubkey};
  //!!! Think to remove null object
  val token = token@{.name == "null"};
  create token_collection (collection_name, owner, token, false);
 }
 
-operation add_token_to_collection (collection_name:name, token_name:name, username:name) {
- val owner = user@{.username == username};
+operation add_token_to_collection (token: session_token, collection_name:name, token_name:name) {
+ val pubkey = validate_session(token);
+ require(pubkey);
+ val owner = user@{pubkey};
  val token = token@{.name == token_name};
  val token_collection = token_collection@{.name == collection_name};
  update token_collection(.token = token);
 }
 
-operation switch_favorite (collection_name:name, username:name) {
- val owner = user@{.username == username};
+operation switch_favorite (token: session_token, collection_name:name) {
+ val pubkey = validate_session(token);
+ require(pubkey);
+ val owner = user@{pubkey};
  val token_collection = token_collection@{.name == collection_name};
  val favorite_value = token_collection.favorite;
  update token_collection(.favorite = not favorite_value);

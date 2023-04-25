@@ -1,6 +1,7 @@
 module;
 import user.*;
 import balance.*;
+import auth.*;
 
 
 
@@ -11,22 +12,27 @@ entity token {
   key mutable owner: user;
 }
 
-operation mint_token (name, text:text, username:name) {
-  val owner = user@{.username == username};
+operation mint_token (token: session_token, name, text:text) {
+  val pubkey = validate_session(token);
+  require(pubkey);
+  val owner = user@{pubkey};
   create token (name, text, owner, false);
 }
 
-operation switch_favorite_token (token_name:name, username:name) {
- val owner = user@{.username == username};
+operation switch_favorite_token (token: session_token, token_name:name) {
+ val pubkey = validate_session(token);
+ require(pubkey);
+ val owner = user@{pubkey};
  val token = token@{.name == token_name};
  val favorite_value = token.favorite;
  update token(.favorite = not favorite_value);
 }
 
 
-function transfer_token(token_name:text, from_username:text, to_username:text, price:integer) {
-  //!!! SECURITY CAUTION. Make sure the caller must be the owner of the token!!!
-  val from_user = user@{.username == from_username};
+function transfer_token(token: session_token, token_name:text, from_username:text, to_username:text, price:integer) {
+  val pubkey = validate_session(token);
+  require(pubkey);
+  val from_user = user@{pubkey};
   val token = token@{.name == token_name, .owner == from_user} ;
   require(token.owner == from_user);
   
