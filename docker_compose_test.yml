@@ -22,5 +22,5 @@ services:
       - ./rell:/opt/chromaway/rell
     environment:
       POSTCHAIN_DB_URL: jdbc:postgresql://postgres/postchain
-    command: "test ."
+    command: "test"
 
