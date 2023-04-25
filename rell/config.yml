@@ -1,5 +1,5 @@
 blockchains:
-  Test:
+  hello:
     module: main
 compile:
   rellVersion: 0.11.0

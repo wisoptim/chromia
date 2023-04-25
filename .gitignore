@@ -1,6 +1,9 @@
 data
 db
 out
-rell
 chromaway
 pg_pgadmin_old.yml
+build
+rell1
+rell/out
+tt.yml
