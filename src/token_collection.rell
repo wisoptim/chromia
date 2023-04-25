@@ -1,6 +1,6 @@
 module;
 import user.*;
-import token.{token.*};
+import token.*;
 
 entity token_collection { 
   key name;
@@ -9,8 +9,8 @@ entity token_collection {
   mutable favorite: boolean;
 }
 
-operation create_collection (token: session_token, collection_name:name) {
- val pubkey = validate_session(token);
+operation create_collection (session_token: session_token, collection_name:name) {
+ val pubkey = validate_session(session_token);
  require(pubkey);
  val owner = user@{pubkey};
  //!!! Think to remove null object
@@ -18,8 +18,8 @@ operation create_collection (token: session_token, collection_name:name) {
  create token_collection (collection_name, owner, token, false);
 }
 
-operation add_token_to_collection (token: session_token, collection_name:name, token_name:name) {
- val pubkey = validate_session(token);
+operation add_token_to_collection (session_token: session_token, collection_name:name, token_name:name) {
+ val pubkey = validate_session(session_token);
  require(pubkey);
  val owner = user@{pubkey};
  val token = token@{.name == token_name};
@@ -27,8 +27,8 @@ operation add_token_to_collection (token: session_token, collection_name:name, t
  update token_collection(.token = token);
 }
 
-operation switch_favorite (token: session_token, collection_name:name) {
- val pubkey = validate_session(token);
+operation switch_favorite (session_token: session_token, collection_name:name) {
+ val pubkey = validate_session(session_token);
  require(pubkey);
  val owner = user@{pubkey};
  val token_collection = token_collection@{.name == collection_name};

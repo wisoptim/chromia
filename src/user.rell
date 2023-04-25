@@ -7,10 +7,11 @@ entity user {
   key username: text;
 }
 
-operation create_user(token: session_token, username: text) {
-  val pubkey = validate_session(token);
-  require(pubkey, username != "");
-  var new_user = create user (username);
+operation create_user(session_token: session_token, username: text) {
+  val pubkey = validate_session(session_token);
+  require(pubkey);
+  require(username != "");
+  var new_user = create user (pubkey, username);
   create balance (new_user, INITIAL_BALANCE); 
 }
 
