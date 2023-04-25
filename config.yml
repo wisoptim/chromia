@@ -1,0 +1,10 @@
+blockchains:
+  Test:
+    module: main
+compile:
+  rellVersion: 0.11.0
+test:
+  modules:
+    - test.arithmetic_test
+    - test.data_test
+

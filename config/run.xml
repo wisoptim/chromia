@@ -1,0 +1,15 @@
+<run wipe-db="false">
+    <nodes>
+        <!-- node config relative to this file -->
+        <config src="node-config.properties" add-signers="true" />
+        <test-config src="node-config.properties" />
+    </nodes>
+    <chains>
+        <chain name="example" iid="1">
+            <config height="0">
+                <app module="main"></app>
+            </config>
+        </chain>
+    </chains>
+</run>
+

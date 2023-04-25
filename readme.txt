@@ -1,0 +1,1 @@
+docker-compose -f pg_pgadmin.yml up --abort-on-container-exit --exit-code-from postchain
