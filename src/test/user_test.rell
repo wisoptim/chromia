@@ -3,8 +3,38 @@ import ^^.user.{user, create_user};
 import ^^.balance.{balance, INITIAL_BALANCE};
 
 function test_create_user() {
-    val tx = rell.test.tx(create_user("Bob"));
-    tx.run();
-    assert_equals(user@*{}(.username), ['Bob']);
-    assert_equals(balance@{user@*{.username =='Bob'}}, INITIAL_BALANCE);
+
+    val alice_pk = rell.test.keypairs.alice.pub;
+    val alice_un = 'Alice';
+
+    assert_equals(user@*{}, list<user>());
+
+    rell.test.tx(create_user(alice_pk, alice_un)).run();
+
+    assert_equals(user@*{}(.username), [alice_un]);
+    assert_equals(user@*{}(.pubkey), [alice_pk]);
+    assert_equals(balance@{user@{.username == alice_un}}(.amount), INITIAL_BALANCE);
+}
+
+/* function test_create_user_multiple() {
+
+    val alice_pk = rell.test.keypairs.alice.pub;
+    val alice_un = 'Alice';
+
+    rell.test.tx(create_user(alice_pk, alice_un)).run();
+
+    assert_equals(user@*{}(.username), [alice_un]);
+    assert_equals(user@*{}(.pubkey), [alice_pk]);
+    assert_equals(balance@{user@{.username == alice_un }}(.amount), INITIAL_BALANCE);
+} */
+
+function test_create_user_duplicate() {
+    
+    val alice_pk = rell.test.keypairs.alice.pub;
+    val alice_un = 'Alice';
+    
+    rell.test.tx(create_user(alice_pk, alice_un)).run();
+    rell.test.tx(create_user(alice_pk, alice_un)).run_must_fail();
+        
+    assert_equals(balance@{user@{.username == alice_un}}(.amount), INITIAL_BALANCE);
 }

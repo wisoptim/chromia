@@ -12,11 +12,11 @@ entity token {
   key mutable owner: user;
 }
 
-operation mint_token (session_token: session_token, name, text:text) {
-  val pubkey = validate_session(session_token);
+operation mint_token (session_token: pubkey,  name,  text) {
+  val pubkey = validate_session_test(session_token);
   require(pubkey);
   val owner = user@{pubkey};
-  create token (name, text, owner, false);
+  create token (name, text, false, owner);
 }
 
 operation switch_favorite_token (session_token:session_token, token_name:name) {

@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: pg_container
+    image: postgres
+    environment:
+      POSTGRES_USER: postchain
+      POSTGRES_PASSWORD: postchain
+      POSTGRES_DB: postchain
+    ports:
+      - "5432:5432"
+    volumes: 
+      - ./data:/var/lib/postgresql/data
+
+  postchain:
+    image: registry.gitlab.com/chromaway/postchain-distribution/chromaway/postchain-test-dapp:3.6.0
+    ports:
+      - "7740:7740"
+    depends_on:
+      - postgres
+    volumes:
+      - .:/opt/chromaway/rell
+    environment:
+      POSTCHAIN_DB_URL: jdbc:postgresql://postgres/postchain
+    command: "test"
+

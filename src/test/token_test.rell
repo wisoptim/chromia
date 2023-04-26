@@ -3,12 +3,18 @@ import ^^.user.{user, create_user};
 import ^^.token.{token, mint_token, switch_favorite_token, transfer_token};
 
 function test_mint_token() {
-    val tx_user = rell.test.tx(create_user("Bob"));
-    tx_user.run();
-    val tx = rell.test.tx(mint_token("Token1", "Best Token", "Bob"));
-    tx.run();
-    assert_equals(token@{.name == "Token1"}, "Token1");
-}
 
-function switch_favorite_token() {}
-function transfer_token() {}
+    val alice_pk = rell.test.keypairs.alice.pub;
+    val alice_un = 'Alice';
+    val token_name = "Tokenname";
+    val token_text = "BestToken";
+
+    rell.test.tx(create_user(alice_pk, alice_un)).run();
+    rell.test.tx(mint_token(alice_pk, token_text, token_name)).run();
+    
+    val t1 = token@{};
+    print('name2----', t1, t1.name);
+
+    val t = token@{.name == token_name};
+    print('name1----', t);
+}

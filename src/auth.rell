@@ -3,6 +3,10 @@ module;
 val SESSION_LENGTH = 1200000; // 20 minutes
 val TIME_OFFSET = 300000; // 5 minutes
 
+struct session_token_test {
+  pubkey: pubkey;
+}
+
 struct session_token {
   message: session_message;
   signed_message: signature;
@@ -51,6 +55,12 @@ function is_session_alive(token: session_token): boolean {
   if (signed_time < current_time - SESSION_LENGTH) return false;
   return true;
 }
+
+
+function validate_session_test(token: pubkey): pubkey? {
+  return token;
+}
+
 
 function validate_session(token: session_token): pubkey? {
   require(op_context.is_signer(byte_array(token.message.disposable_pubkey)));

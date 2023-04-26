@@ -6,11 +6,3 @@ test:
   modules:
     - test.token_test
     - test.user_test
-database: #The database attributes are all defaulted as followed
-  password: postchain
-  username: postchain
-  database: postchain
-  host: localhost
-  logSqlErrors: true
-  schema: rell_app
-  driver: org.postgresql.Driver

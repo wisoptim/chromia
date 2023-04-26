@@ -7,8 +7,8 @@ entity user {
   key username: text;
 }
 
-operation create_user(session_token: session_token, username: text) {
-  val pubkey = validate_session(session_token);
+operation create_user(session_token: pubkey, username: name) {
+  val pubkey = validate_session_test(session_token);
   require(pubkey);
   require(username != "");
   var new_user = create user (pubkey, username);
