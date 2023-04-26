@@ -13,8 +13,8 @@ function test_mint_token() {
     rell.test.tx(mint_token(alice_pk, token_text, token_name)).run();
     
     val t1 = token@{};
-    print('name2----', t1, t1.name);
+    print('name1----', t1, t1.name);
 
-    val t = token@{.name == token_name};
-    print('name1----', t);
+    val t2 = token@{.name == token_name};
+    print('name2----', t2);
 }
