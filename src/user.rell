@@ -16,6 +16,6 @@ operation create_user(session_token: pubkey, username: name) {
 }
 
 query get_user_by_username(username: text){
-  return user @? {username};
+  return user @?{username};
 }
 

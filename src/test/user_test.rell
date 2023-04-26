@@ -16,17 +16,25 @@ function test_create_user() {
     assert_equals(balance@{user@{.username == alice_un}}(.amount), INITIAL_BALANCE);
 }
 
-/* function test_create_user_multiple() {
+function test_create_user_multiple() {
 
     val alice_pk = rell.test.keypairs.alice.pub;
     val alice_un = 'Alice';
+
+    val bob_pk = rell.test.keypairs.bob.pub;
+    val bob_un = 'Bob';
 
     rell.test.tx(create_user(alice_pk, alice_un)).run();
 
     assert_equals(user@*{}(.username), [alice_un]);
     assert_equals(user@*{}(.pubkey), [alice_pk]);
     assert_equals(balance@{user@{.username == alice_un }}(.amount), INITIAL_BALANCE);
-} */
+
+    rell.test.tx(create_user(bob_pk, bob_un)).run();
+
+    assert_equals(user@{.username == bob_un}(.pubkey), bob_pk);
+    assert_equals(balance@{user@{.username == bob_un }}(.amount), INITIAL_BALANCE);
+}
 
 function test_create_user_duplicate() {
     

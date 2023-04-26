@@ -1,6 +1,6 @@
 @test module;
 import ^^.user.{user, create_user};
-import ^^.token.{token, mint_token, switch_favorite_token, transfer_token};
+import ^^.token.{token, mint_token, switch_favorite_token, transfer_token, get_tokens_by_user};
 
 function test_mint_token() {
 
@@ -10,11 +10,65 @@ function test_mint_token() {
     val token_text = "BestToken";
 
     rell.test.tx(create_user(alice_pk, alice_un)).run();
-    rell.test.tx(mint_token(alice_pk, token_text, token_name)).run();
+    rell.test.tx(mint_token(alice_pk, token_name, token_text)).run();
     
-    val t1 = token@{};
-    print('name1----', t1, t1.name);
+    assert_equals(token@{.name == token_name}(.text), token_text);
+}
 
-    val t2 = token@{.name == token_name};
-    print('name2----', t2);
+function test_get_tokens_by_user(){
+    val alice_pk = rell.test.keypairs.alice.pub;
+    val alice_un = 'Alice';
+    
+    val token1_name = 'Token name1';
+    val token1_text = 'BestToken1';
+
+    val token2_name = 'Token name2';
+    val token2_text = 'BestToken2';
+
+    rell.test.tx(create_user(alice_pk, alice_un)).run();
+    rell.test.tx(mint_token(alice_pk, token1_name, token1_text)).run();
+    rell.test.tx(mint_token(alice_pk, token2_name, token2_text)).run();
+    
+    //val tokens:list<token> = rell.test.tx(get_tokens_by_user(alice_un)).run();
+    //val tokens = assert_equals(token@{.name == token_name}(.text), token_text);
+    //print(tokens);
+}
+
+
+
+function test_switch_favorite_token(){
+    val alice_pk = rell.test.keypairs.alice.pub;
+    val alice_un = 'Alice';
+    val token_name = 'Tokenname';
+    val token_text = 'BestToken';
+
+    rell.test.tx(create_user(alice_pk, alice_un)).run();
+    rell.test.tx(mint_token(alice_pk, token_name, token_text)).run();
+
+    assert_equals(token@{.name == token_name}(.favorite), false);
+
+    rell.test.tx(switch_favorite_token(alice_pk, token_name)).run();
+
+    assert_equals(token@{.name == token_name}(.favorite), true);
+}
+
+function test_transfer_token(){
+    val alice_pk = rell.test.keypairs.alice.pub;
+    val alice_un = 'Alice';
+
+    val bob_pk = rell.test.keypairs.bob.pub;
+    val bob_un = 'Bob';
+
+    val token_name = 'Tokenname';
+    val token_text = 'BestToken';
+
+    rell.test.tx(create_user(alice_pk, alice_un)).run();
+    rell.test.tx(create_user(bob_pk, bob_un)).run();
+    rell.test.tx(mint_token(alice_pk, token_name, token_text)).run();
+
+    assert_equals(token@{.name == token_name}(token.owner.username), alice_un);
+
+    rell.test.tx(transfer_token(alice_pk, token_name, bob_un)).run();
+
+    assert_equals(token@{.name == token_name}(token.owner.username), bob_un);
 }

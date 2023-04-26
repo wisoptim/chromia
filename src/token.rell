@@ -9,7 +9,7 @@ entity token {
   key name;
   key text: text;
   mutable favorite: boolean;
-  key mutable owner: user;
+  mutable owner: user;
 }
 
 operation mint_token (session_token: pubkey,  name,  text) {
@@ -19,8 +19,8 @@ operation mint_token (session_token: pubkey,  name,  text) {
   create token (name, text, false, owner);
 }
 
-operation switch_favorite_token (session_token:session_token, token_name:name) {
- val pubkey = validate_session(session_token);
+operation switch_favorite_token (session_token: pubkey, token_name:name) {
+ val pubkey = validate_session_test(session_token);
  require(pubkey);
  val owner = user@{pubkey};
  val token = token@{.name == token_name};
@@ -28,23 +28,22 @@ operation switch_favorite_token (session_token:session_token, token_name:name) {
  update token(.favorite = not favorite_value);
 }
 
-
-function transfer_token(session_token: session_token, token_name:text, from_username:text, to_username:text, price:integer) {
-  val pubkey = validate_session(session_token);
+operation transfer_token (session_token: pubkey, token_name:text, to_username:text) {
+  val pubkey = validate_session_test(session_token);
   require(pubkey);
+  
   val from_user = user@{pubkey};
   val token = token@{.name == token_name, .owner == from_user} ;
   require(token.owner == from_user);
   
   val new_owner = user@{.username == to_username};
   update token(.owner = new_owner);
-  transfer_balance(new_owner, from_user, price);
 }
 
-query get_tokens_by_user(username:name):list<(token)> {
+query get_tokens_by_user (username:name):list<(token)> {
   return token@*{.owner == user@{username}};
 }
 
-query get_token_by_token_name(tokenname:name):(token) {
+query get_token_by_token_name (tokenname:name):(token) {
   return token@{.name == tokenname};
 }
