@@ -1,0 +1,19 @@
+@test module;
+import ^^.user.{user, create_user};
+import ^^.token.{token, mint_token};
+import ^^.token_collection.{token_collection, create_collection };
+/* 
+function test_create_collection() {
+
+    val alice_pk = rell.test.keypairs.alice.pub;
+    val alice_un = 'Alice';
+    val collection_name = "Collection name";
+    
+    val tx1 = rell.test.tx().op(create_user(alice_un)).sign(rell.test.keypairs.alice);
+    rell.test.block().tx(tx1).run();
+
+    val tx2 = rell.test.tx().op(create_collection(collection_name)).sign(rell.test.keypairs.alice);
+    rell.test.block().tx(tx2).run();
+   // assert_equals(token@*{}(.name), [collection_name]);
+}
+  */

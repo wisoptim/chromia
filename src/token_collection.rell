@@ -9,29 +9,19 @@ entity token_collection {
   mutable favorite: boolean;
 }
 
-operation create_collection (session_token: session_token, collection_name:name) {
- val pubkey = validate_session(session_token);
- require(pubkey);
- val owner = user@{pubkey};
- //!!! Think to remove null object
- val token = token@{.name == "null"};
- create token_collection (collection_name, owner, token, false);
+operation create_collection (collection_name:name) {
+  val pubkey = get_signer_pkey();
+
+  val owner = user@{pubkey};
+  //!!! Think to remove null object
+  val token = token@{.name == "null"};
+  create token_collection (collection_name, owner, token, false);
 }
 
-operation add_token_to_collection (session_token: session_token, collection_name:name, token_name:name) {
- val pubkey = validate_session(session_token);
- require(pubkey);
- val owner = user@{pubkey};
- val token = token@{.name == token_name};
- val token_collection = token_collection@{.name == collection_name};
- update token_collection(.token = token);
-}
-
-operation switch_favorite (session_token: session_token, collection_name:name) {
- val pubkey = validate_session(session_token);
- require(pubkey);
- val owner = user@{pubkey};
- val token_collection = token_collection@{.name == collection_name};
- val favorite_value = token_collection.favorite;
- update token_collection(.favorite = not favorite_value);
+operation switch_favorite_collection (collection_name:name) {
+  val pubkey = get_signer_pkey();
+  val owner = user@{pubkey};
+  val token_collection = token_collection@{.name == collection_name};
+  val favorite_value = token_collection.favorite;
+  update token_collection(.favorite = not favorite_value);
 }

@@ -1,19 +1,26 @@
 module;
 import balance.*;
 import auth.*;
+import utils.*;
 
 entity user {
   key pubkey; 
   key username: text;
 }
 
-operation create_user(session_token: pubkey, username: name) {
-  val pubkey = validate_session_test(session_token);
-  require(pubkey);
+operation create_user(username: name) {
+  
+  val pubkey = get_signer_pkey();
   require(username != "");
   var new_user = create user (pubkey, username);
   create balance (new_user, INITIAL_BALANCE); 
 }
+
+operation create_user_(username: name) {
+  val r = get_signer_pkey();
+  print('ssss----', r);
+}
+
 
 query get_user_by_username(username: text){
   return user @?{username};

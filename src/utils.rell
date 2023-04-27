@@ -1,0 +1,5 @@
+module;
+
+function get_signer_pkey():pubkey{
+    return require_not_empty(op_context.get_signers())[0];
+}
