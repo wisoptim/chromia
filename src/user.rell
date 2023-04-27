@@ -1,6 +1,5 @@
 module;
 import balance.*;
-import auth.*;
 import utils.*;
 
 entity user {
@@ -15,12 +14,6 @@ operation create_user(username: name) {
   var new_user = create user (pubkey, username);
   create balance (new_user, INITIAL_BALANCE); 
 }
-
-operation create_user_(username: name) {
-  val r = get_signer_pkey();
-  print('ssss----', r);
-}
-
 
 query get_user_by_username(username: text){
   return user @?{username};

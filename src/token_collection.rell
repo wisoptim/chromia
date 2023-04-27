@@ -6,22 +6,12 @@ entity token_collection {
   key name;
   key owner:user;
   mutable token: token;
-  mutable favorite: boolean;
 }
 
-operation create_collection (collection_name:name) {
-  val pubkey = get_signer_pkey();
-
-  val owner = user@{pubkey};
-  //!!! Think to remove null object
-  val token = token@{.name == "null"};
-  create token_collection (collection_name, owner, token, false);
-}
-
-operation switch_favorite_collection (collection_name:name) {
+operation create_collection (collection_name:name, token_name:name) {
   val pubkey = get_signer_pkey();
   val owner = user@{pubkey};
-  val token_collection = token_collection@{.name == collection_name};
-  val favorite_value = token_collection.favorite;
-  update token_collection(.favorite = not favorite_value);
+
+  val token = token@{.name == token_name};
+  create token_collection (collection_name, owner, token);
 }

@@ -1,0 +1,51 @@
+module;
+import user.*;
+import token.*;
+import token_collection.*;
+import utils.*;
+
+entity token_favorite { 
+  key owner: user;
+  key token: token;
+}
+
+entity token_collection_favorite { 
+  key owner: user;
+  key tokencollection: token_collection;
+}
+
+
+operation create_token_favorite (token_name: text) {
+  val pubkey = get_signer_pkey();
+  val owner = user@{pubkey};
+
+  val token = token@{.name == token_name};
+  create token_favorite (owner, token);
+}
+ 
+operation delete_token_favorite(token_name: text){
+  val pubkey = get_signer_pkey();
+  val owner = user@{pubkey};
+  
+  val token = token@?{.name == token_name};
+  delete token_favorite @? { .owner == owner, token == token}; 
+}
+
+operation create_token_collection_favorite (collection_name: text) {
+  val pubkey = get_signer_pkey();
+  val owner = user@{pubkey};
+
+  val token_collection = token_collection@{.name == collection_name};
+  create token_collection_favorite (owner, token_collection);
+}
+ 
+operation delete_token_collection_favorite(collection_name: text){
+  val pubkey = get_signer_pkey();
+  val owner = user@{pubkey};
+  
+  val token_collection = token_collection@?{.name == collection_name};
+  delete token_collection_favorite @? { .owner == owner, token_collection == token_collection}; 
+}
+
+
+

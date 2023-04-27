@@ -1,14 +1,12 @@
 module;
 import user.*;
 import balance.*;
-import auth.*;
 import utils.*;
 
 
 entity token { 
   key name;
   key text: text;
-  mutable favorite: boolean;
   mutable owner: user;
 }
 
@@ -16,10 +14,10 @@ operation mint_token (name,  text) {
   val pubkey = get_signer_pkey();
 
   val owner = user@{pubkey};
-  create token (name, text, false, owner);
+  create token (name, text, owner);
 }
 
-operation switch_favorite_token (token_name:name) {
+/* operation switch_favorite_token (token_name:name) {
  val pubkey = get_signer_pkey();
  
  val owner = user@{pubkey};
@@ -27,7 +25,7 @@ operation switch_favorite_token (token_name:name) {
  val favorite_value = token.favorite;
  update token(.favorite = not favorite_value);
 }
-
+ */
 operation transfer_token (token_name:text, to_username:text) {
   val pubkey = get_signer_pkey();
   

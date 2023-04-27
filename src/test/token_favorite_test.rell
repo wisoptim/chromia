@@ -1,0 +1,63 @@
+@test module;
+import ^^.user.{user, create_user};
+import ^^.token.{token, mint_token};
+import ^^.token_collection.{create_collection};
+import ^^.favorite.{token_favorite, create_token_favorite, delete_token_favorite, create_token_collection_favorite, delete_token_collection_favorite};
+
+function test_create_token_favorite(){
+    
+    val alice_un = 'Alice';
+    val token_name = "Token name";
+    val token_text = "Best Token";
+
+    val tx1 = rell.test.tx().op(create_user(alice_un)).sign(rell.test.keypairs.alice);
+    val tx2 = rell.test.tx().op(mint_token(token_name, token_text)).sign(rell.test.keypairs.alice);
+    val tx3 = rell.test.tx().op(create_token_favorite(token_name)).sign(rell.test.keypairs.alice);
+    rell.test.block().tx(tx1).tx(tx2).tx(tx3).run();
+}
+
+function test_delete_token_favorite(){
+    
+    val alice_un = 'Alice';
+    val token_name = "Token name";
+    val token_text = "Best Token";
+
+    val tx1 = rell.test.tx().op(create_user(alice_un)).sign(rell.test.keypairs.alice);
+    val tx2 = rell.test.tx().op(mint_token(token_name, token_text)).sign(rell.test.keypairs.alice);
+    val tx3 = rell.test.tx().op(create_token_favorite(token_name)).sign(rell.test.keypairs.alice);
+    rell.test.block().tx(tx1).tx(tx2).tx(tx3).run();
+
+
+    val tx4 = rell.test.tx().op(delete_token_favorite(token_name)).sign(rell.test.keypairs.alice);
+    rell.test.block().tx(tx4).run();
+}
+
+function test_create_token_collection_favorite(){
+    val alice_un = 'Alice';
+    val token_name = "Token name";
+    val token_text = "Best Token";
+    val collection_name = "Collection name";
+
+    val tx1 = rell.test.tx().op(create_user(alice_un)).sign(rell.test.keypairs.alice);
+    val tx2 = rell.test.tx().op(mint_token(token_name, token_text)).sign(rell.test.keypairs.alice);
+    val tx3 = rell.test.tx().op(create_token_favorite(token_name)).sign(rell.test.keypairs.alice);
+    val tx4 = rell.test.tx().op(create_collection(collection_name, token_name)).sign(rell.test.keypairs.alice);
+    rell.test.block().tx(tx1).tx(tx2).tx(tx3).tx(tx4).run();
+}
+
+function test_delete_token_collection_favorite(){
+val alice_un = 'Alice';
+    val token_name = "Token name";
+    val token_text = "Best Token";
+    val collection_name = "Collection name";
+
+    val tx1 = rell.test.tx().op(create_user(alice_un)).sign(rell.test.keypairs.alice);
+    val tx2 = rell.test.tx().op(mint_token(token_name, token_text)).sign(rell.test.keypairs.alice);
+    val tx3 = rell.test.tx().op(create_token_favorite(token_name)).sign(rell.test.keypairs.alice);
+    val tx4 = rell.test.tx().op(create_collection(collection_name, token_name)).sign(rell.test.keypairs.alice);
+    rell.test.block().tx(tx1).tx(tx2).tx(tx3).tx(tx4).run();
+
+    val tx5 = rell.test.tx().op(delete_token_collection_favorite(collection_name)).sign(rell.test.keypairs.alice);
+    rell.test.block().tx(tx5).run();
+
+}

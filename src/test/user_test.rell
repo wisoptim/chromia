@@ -1,6 +1,5 @@
 @test module;
-import ^^.user.{user, create_user, create_user_};
-import ^^.auth.*;
+import ^^.user.{user, create_user};
 import ^^.balance.{balance, INITIAL_BALANCE};
 
 function test_create_user() {
